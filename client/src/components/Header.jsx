@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 const Header = () => {
+  const { currentUser } = useSelector((state) => state.user);
   const [inputHandler, setInputHandler] = useState("");
   return (
     <header className="bg-slate-200 shadow-md">
@@ -16,13 +18,13 @@ const Header = () => {
           <input
             type="text"
             placeholder="Search.."
-            className=" outline-none rounded-lg bg-transparent relative w-24 sm:w-64"
+            className=" outline-none rounded-lg bg-transparent relative w-48 sm:w-64"
             value={inputHandler}
             onChange={(e) => setInputHandler(e.target.value)}
           />
           <FaSearch className="absolute" />
         </form>
-        <ul className="flex gap-4">
+        <ul className="flex gap-4 justify-center items-center">
           <Link to="/">
             <li className="hidden sm:inline text-slate-500 hover:underline ">
               Home
@@ -33,10 +35,21 @@ const Header = () => {
               About
             </li>
           </Link>
+
           <Link to="/sign-in">
-            <li className=" sm:inline text-slate-500 hover:underline ">
-              Sign In
-            </li>
+            {currentUser ? (
+              <Link to="/profile">
+                <img
+                  src={currentUser?.data?.avatar}
+                  alt="profile"
+                  className="rounded-full h-9 w-9 object-cover items-center flex justify-center"
+                />
+              </Link>
+            ) : (
+              <li className=" sm:inline text-slate-500 hover:underline ">
+                Sign In
+              </li>
+            )}
           </Link>
         </ul>
       </div>

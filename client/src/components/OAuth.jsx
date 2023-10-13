@@ -24,7 +24,7 @@ const OAuth = () => {
       dispatch(signInSuccess(res));
       navigate("/");
     } catch (error) {
-      console.log("googel errorr:", error);
+      console.log("googel errorr:", error.message);
     }
   };
   return (

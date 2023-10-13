@@ -83,7 +83,7 @@ const GooglesigninController = async (req, res, next) => {
         .json(rest);
     } else {
       const generatedPassword = Math.random().toString(36).slice(-8);
-      const hashedPassword = brcyt.hashSync(generatedPassword, 10);
+      const hashedPassword = bcrypt.hashSync(generatedPassword, 10);
       const newUser = new User({
         username:
           req.body.name.split(" ").join("").toLowerCase() +

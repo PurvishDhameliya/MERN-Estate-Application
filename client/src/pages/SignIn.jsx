@@ -46,42 +46,42 @@ const SignIn = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-3">
-      <h2 className="text-3xl text-center font-semibold my-6">Sign In</h2>
-      <form action="" className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Enter Email"
-          className="p-3 outline-none rounded-lg border"
-        />
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Enter Password"
-          className="p-3 outline-none rounded-lg border"
-        />
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-slate-700 rounded-lg p-3 text-white uppercase hover:opacity-95 disabled:opacity-80"
-        >
-          {loading ? "loading" : "Sign In"}
-        </button>
-        <OAuth />
-      </form>
-      <div className="flex gap-2 mt-3">
-        <p>{"Don't Have an account?"}</p>
-        <Link to="/sign-up">
-          <span className="text-blue-700 cursor-pointer">Sign Up</span>
-        </Link>
+      <div className="max-w-lg mx-auto p-3">
+        <h2 className="text-3xl text-center font-semibold my-6">Sign In</h2>
+        <form action="" className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Enter Email"
+            className="p-3 outline-none rounded-lg border"
+          />
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Enter Password"
+            className="p-3 outline-none rounded-lg border"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-slate-700 rounded-lg p-3 text-white uppercase hover:opacity-95 disabled:opacity-80"
+          >
+            {loading ? "loading" : "Sign In"}
+          </button>
+          <OAuth />
+        </form>
+        <div className="flex gap-2 mt-3">
+          <p>{"Don't Have an account?"}</p>
+          <Link to="/sign-up">
+            <span className="text-blue-700 cursor-pointer">Sign Up</span>
+          </Link>
+        </div>
+        {error && <p className="text-red-700 mt-5">{error}</p>}
       </div>
-      {error && <p className="text-red-700 mt-5">{error}</p>}
-    </div>
   );
 };
 
