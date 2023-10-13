@@ -29,10 +29,12 @@ const Header = () => {
             </li>
           </Link>
           <Link to="/about">
-            <li className="text-slate-500 hover:underline">About</li>
+            <li className="hidden sm:inline text-slate-500 hover:underline">
+              About
+            </li>
           </Link>
           <Link to="/sign-in">
-            <li className="hidden sm:inline text-slate-500 hover:underline ">
+            <li className=" sm:inline text-slate-500 hover:underline ">
               Sign In
             </li>
           </Link>
