@@ -7,12 +7,13 @@ import {
   signInStart,
   signInSuccess,
 } from "../store/user/userSlice";
+import OAuth from "../components/OAuth";
 
 const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // const { loading = false, error } = useSelector((state) => state?.user || {});
-  const { loading , error } = useSelector((state) => state?.user);
+  const { loading, error } = useSelector((state) => state?.user);
 
   console.log("error:::", error);
   const [formData, setFormData] = useState({
@@ -71,6 +72,7 @@ const SignIn = () => {
         >
           {loading ? "loading" : "Sign In"}
         </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 mt-3">
         <p>{"Don't Have an account?"}</p>
