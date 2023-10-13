@@ -40,7 +40,7 @@ const SignUp = () => {
         password: "",
       });
       navigate("/sign-in");
-    } catch (error) { 
+    } catch (error) {
       setLoading(true);
       setError(error.message);
       console.log(error);
@@ -61,7 +61,7 @@ const SignUp = () => {
         />
         <input
           className="border p-3 rounded-lg outline-none"
-          type="text"
+          type="email"
           name="email"
           value={formData.email}
           placeholder="Enter Email"

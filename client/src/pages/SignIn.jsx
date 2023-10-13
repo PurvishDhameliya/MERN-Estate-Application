@@ -11,7 +11,9 @@ import {
 const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.user);
+  // const { loading = false, error } = useSelector((state) => state?.user || {});
+  const { loading , error } = useSelector((state) => state?.user);
+
   console.log("error:::", error);
   const [formData, setFormData] = useState({
     email: "",
@@ -47,7 +49,7 @@ const SignIn = () => {
       <h2 className="text-3xl text-center font-semibold my-6">Sign In</h2>
       <form action="" className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <input
-          type="text"
+          type="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
