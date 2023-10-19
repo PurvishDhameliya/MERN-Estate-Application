@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getDownloadURL,
   getStorage,
@@ -7,13 +7,26 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+import {
+  updateUserFailure,
+  updateUserStart,
+  updateUserSuccess,
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  signoutUserStart,
+} from "../store/user/userSlice";
+import axios from "axios";
 const Profile = () => {
-  const { currentUser, loading } = useSelector((state) => state?.user);
+  const { currentUser, loading, error } = useSelector((state) => state?.user);
   const fileRef = useRef(null);
+  const dispatch = useDispatch();
   const [file, setFile] = useState(undefined);
   const [filePercentage, setFilePercentage] = useState(0);
   const [fileUploadError, setUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+  const [success, setSuccess] = useState(false);
+
   // console.log(formData)
   // console.log(filePercentage)
   // console.log(fileUploadError)
@@ -48,15 +61,75 @@ const Profile = () => {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      dispatch(updateUserStart());
+      const res = await axios.post(
+        `/api/user/update/${currentUser?.data?._id}`,
+        formData
+      );
+      if (!res.data.success) {
+        dispatch(updateUserFailure(res.data.message));
+        return;
+      }
+      console.log(res);
+      dispatch(updateUserSuccess(res));
+      setSuccess(true);
+    } catch (error) {
+      dispatch(
+        updateUserFailure(error?.response?.data?.message || error?.message)
+      );
+    }
   };
 
-  // firsbase storage rules :)
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(deleteUserStart());
+      const res = await axios.delete(
+        `/api/user/delete/${currentUser.data._id}`
+      );
+      if (!res.data.success) {
+        dispatch(deleteUserFailure(res.data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(res.data));
+    } catch (error) {
+      dispatch(
+        deleteUserFailure(error?.response?.data?.message || error?.message)
+      );
+    }
+  };
+
+  const handleSignout = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(signoutUserStart());
+      const res = await axios.get("/api/auth/signout");
+      if (!res.data.success) {
+        dispatch(deleteUserFailure(res.data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(res?.data));
+    } catch (error) {
+      dispatch(
+        deleteUserFailure(error?.response?.data?.message || error?.message)
+      );
+    }
+  };
+
+  // In firsbase storage app we include this rules :)
+
   // allow read;
   // allow write: if
   // request.resource.size < 2 * 1024 * 1024 &&
   // request.resource.contentType.matches('image/.*')
+
   return (
     <div>
       <div className="max-w-lg mx-auto p-3">
@@ -92,27 +165,30 @@ const Profile = () => {
           <input
             type="text"
             name="username"
-            value={currentUser?.data?.username}
+            defaultValue={currentUser?.data?.username}
             placeholder="Enter Email"
             className="p-3 outline-none rounded-lg border"
+            onChange={handleChange}
           />
           <input
             type="email"
             name="email"
-            value={currentUser?.data?.email}
+            defaultValue={currentUser?.data?.email}
             placeholder="Enter Email"
             className="p-3 outline-none rounded-lg border"
+            onChange={handleChange}
           />
           <input
             type="password"
             name="password"
-            value={formData.password}
+            defaultValue={currentUser?.data?.password}
             placeholder="Enter Password"
             className="p-3 outline-none rounded-lg border"
+            onChange={handleChange}
           />
           <button
             type="submit"
-            disabled={loading}
+            //disabled={loading}
             className="bg-slate-700 rounded-lg p-3 text-white uppercase hover:opacity-95 disabled:opacity-80"
           >
             {loading ? "loading" : "Update"}
@@ -126,9 +202,17 @@ const Profile = () => {
           </button>
         </form>
         <div className="flex justify-between p-2">
-          <span className="text-red-700 cursor-pointer">Delete Account</span>
-          <span className="text-red-700 cursor-pointer">Sign out</span>
+          <span className="text-red-700 cursor-pointer" onClick={handleDelete}>
+            Delete Account
+          </span>
+          <span className="text-red-700 cursor-pointer" onClick={handleSignout}>
+            Sign out
+          </span>
         </div>
+        <p className="text-red-700 mt-4">{error ? error : ""}</p>
+        <p className="text-green-700 mt-4">
+          {success ? "updated profile details.." : ""}
+        </p>
       </div>
     </div>
   );

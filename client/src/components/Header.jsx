@@ -36,21 +36,21 @@ const Header = () => {
             </li>
           </Link>
 
-          <Link to="/sign-in">
-            {currentUser ? (
-              <Link to="/profile">
-                <img
-                  src={currentUser?.data?.avatar}
-                  alt="profile"
-                  className="rounded-full h-9 w-9 object-cover items-center flex justify-center"
-                />
-              </Link>
-            ) : (
+          {currentUser ? (
+            <Link to="/profile">
+              <img
+                src={currentUser?.data?.avatar}
+                alt="profile"
+                className="rounded-full h-9 w-9 object-cover items-center flex justify-center"
+              />
+            </Link>
+          ) : (
+            <Link to="/sign-in">
               <li className=" sm:inline text-slate-500 hover:underline ">
                 Sign In
               </li>
-            )}
-          </Link>
+            </Link>
+          )}
         </ul>
       </div>
     </header>

@@ -1,17 +1,19 @@
 const express = require("express");
 require("dotenv").config();
 const bodyParser = require("body-parser");
-const connectDB = require("./config/connectDB");
 const mongoose = require("mongoose");
-const userRoute = require("./routes/userRoute");
-const authRoute = require("./routes/authRoute");
 const cors = require("cors");
 const app = express();
+const cookieParser = require("cookie-parser");
+
+const connectDB = require("./config/connectDB");
+const userRoute = require("./routes/userRoute");
+const authRoute = require("./routes/authRoute");
 
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
-
+app.use(cookieParser());
 connectDB();
 const PORT = process.env.PORT || 8080;
 
@@ -25,11 +27,8 @@ mongoose.connection.on("error", (error) => {
   console.log(`MongoDB connection error: ${error.message}`);
 });
 
-
-
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
-
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
