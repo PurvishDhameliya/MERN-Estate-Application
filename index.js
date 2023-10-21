@@ -9,6 +9,7 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./config/connectDB");
 const userRoute = require("./routes/userRoute");
 const authRoute = require("./routes/authRoute");
+const listingRoute = require("./routes/listingRoute");
 
 app.use(express.json());
 app.use(bodyParser.json());
@@ -29,6 +30,7 @@ mongoose.connection.on("error", (error) => {
 
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
+app.use("/api/listing", listingRoute);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
